@@ -1,0 +1,8 @@
+streamlit
+radon
+plotly
+google-generativeai
+reportlab
+pandas
+scikit-learn
+joblib
