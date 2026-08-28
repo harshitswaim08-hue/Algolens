@@ -49,8 +49,6 @@ The trained model is stored as:
 ml/model.pkl
 
 
-
-
 🛠️ Technologies Used
 Python
 Streamlit
@@ -62,7 +60,6 @@ Joblib
 ReportLab
 Plotly
 Radon
-
 
 📁 Project Structure
 Algolens/
@@ -80,6 +77,7 @@ Algolens/
 │   ├── inspect_dataset.py
 │   ├── train_model.py
 │   ├── test_model.py
+│   ├── test_predictor.py
 │   ├── ml_predictor.py
 │   └── model.pkl
 │
@@ -98,11 +96,13 @@ Algolens/
 └── .gitignore
 
 
+
+
 ⚙️ Installation
 
 Clone the repository:
 
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/harshitswaim08-hue/Algolens.git
 
 Go to the project directory:
 
@@ -116,21 +116,18 @@ Activate the virtual environment on Windows:
 
 venv\Scripts\activate
 
-Install dependencies:
+Install the required dependencies:
 
 pip install -r requirements.txt
 🔐 API Key Setup
 
 Create a .env file in the project root and add your Gemini API key.
 
-GEMINI_API_KEY=your_api_key_here
-
-
+GEMINI_API_KEY
 
 ▶️ Run the Application
 
 Start the Streamlit application:
-
 streamlit run app.py
 
 The application will open in your browser.
@@ -152,12 +149,73 @@ Suggestions & Improved Code
      ↓
 Text/PDF Report
 
+
+🤖 AI Analysis
+
+Algolens uses Google Gemini AI to provide:
+
+Code summary
+Improvement suggestions
+Optimized/improved code
+
+This complements the static analyzer and machine-learning-based quality prediction.
+
+📈 Analysis Dashboard
+
+The application provides:
+
+Overall Score
+Code Quality Score
+ML Quality Prediction
+Lines of Code
+Number of Functions
+Number of Loops
+Number of Conditions
+Time Complexity
+Space Complexity
+Loop Depth
+Performance Issues
+Code Quality Issues
+
+
+📄 Automated Reports
+
+Algolens can generate:
+
+Text Report
+
+A downloadable text-based analysis report containing code metrics, quality analysis, performance analysis, and AI insights.
+
+PDF Report
+
+A professional PDF report containing the complete analysis results, AI suggestions, and improved code.
+
 🎯 Project Objective
 
 The objective of Algolens is to provide developers and students with an automated platform for understanding code performance, identifying potential issues, evaluating code quality, and receiving AI-powered optimization suggestions.
 
+🌟 Key Benefits
+Easy-to-use web interface
+Automated code analysis
+Complexity detection
+Machine-learning-based quality prediction
+AI-powered recommendations
+Automated report generation
+Helps users understand and improve their code
+
+
+🔮 Future Scope
+
+Support for additional programming languages
+Advanced complexity analysis
+More machine-learning models
+Code quality visualization
+GitHub repository integration
+Automated code review
+Performance benchmarking
+Cloud deployment
+
+
 👨‍💻 Project
-
 Algolens — AI Driven Code Performance Analyzer
-
-Developed as an academic group project
+Developed as an academic group project.
