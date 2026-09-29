@@ -1,10 +1,14 @@
 import os
+import time
 
 from dotenv import load_dotenv
 from google import genai
 
 
-# Load API key from .env
+# ==================================================
+# LOAD API KEY
+# ==================================================
+
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
@@ -16,13 +20,82 @@ if not API_KEY:
     )
 
 
-# Create Gemini client
+# ==================================================
+# GEMINI CLIENT
+# ==================================================
+
 client = genai.Client(api_key=API_KEY)
 
 
-# --------------------------------------------------
+# ==================================================
+# MODELS
+# ==================================================
+
+PRIMARY_MODEL = "gemini-3.6-flash"
+FALLBACK_MODEL = "gemini-3.5-flash-lite"
+
+
+# ==================================================
+# GEMINI REQUEST
+# ==================================================
+
+def generate_with_retry(prompt):
+
+    models = [
+        PRIMARY_MODEL,
+        FALLBACK_MODEL
+    ]
+
+    last_error = None
+
+    for model_name in models:
+
+        for attempt in range(2):
+
+            try:
+
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
+
+                return response.text
+
+            except Exception as e:
+
+                last_error = e
+                error_text = str(e)
+
+                # Retry temporary availability errors
+                if (
+                    "503" in error_text
+                    or "UNAVAILABLE" in error_text
+                ):
+
+                    if attempt == 0:
+                        print(
+                            f"{model_name} temporarily unavailable."
+                        )
+
+                        time.sleep(3)
+                        continue
+
+                    print(
+                        f"{model_name} unavailable. "
+                        f"Trying next model..."
+                    )
+
+                    break
+
+                # Don't hide other errors
+                raise
+
+    raise last_error
+
+
+# ==================================================
 # AI CODE SUMMARY
-# --------------------------------------------------
+# ==================================================
 
 def summarize_code(code):
 
@@ -46,17 +119,12 @@ Python Code:
 {code}
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
-
-    return response.text
+    return generate_with_retry(prompt)
 
 
-# --------------------------------------------------
+# ==================================================
 # AI CODE SUGGESTIONS
-# --------------------------------------------------
+# ==================================================
 
 def suggest_improvements(code):
 
@@ -96,13 +164,12 @@ Python Code:
 {code}
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
+    return generate_with_retry(prompt)
 
-    return response.text
 
+# ==================================================
+# AI IMPROVED CODE
+# ==================================================
 
 def generate_improved_code(code):
 
@@ -112,12 +179,14 @@ You are an expert Python developer.
 Improve the following Python code.
 
 Goals:
+
 1. Improve time complexity where possible.
 2. Reduce unnecessary memory usage.
 3. Improve readability.
 4. Keep the original functionality unchanged.
 
 Return ONLY the improved Python code.
+
 Do not add explanations.
 Do not use markdown code fences.
 
@@ -126,9 +195,4 @@ Original Python Code:
 {code}
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
-
-    return response.text
+    return generate_with_retry(prompt)
